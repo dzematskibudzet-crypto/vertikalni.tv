@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<title>Džamija Pobrđe</title>
+
+<style>
+html, body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow:hidden;
+}
+
+/* BACKGROUND TAČNO ZA 1080x1920 */
+body{
+  background: url("background.png") no-repeat center center fixed;
+  background-size: 100% 100%;
+  color:white;
+}
+
+/* SAT GORE DESNO */
+#sat{
+  position:absolute;
+  top:4%;
+  right:6%;
+  font-size:5vw;
+  font-weight:bold;
+  color:white;
+}
+
+/* DATUM – PRVA BEŽ TRAKA */
+#datum{
+  position:absolute;
+  top:28%;
+  width:100%;
+  text-align:center;
+  font-size:3vw;
+  color:black;
+}
+
+/* VREMENA */
+#vremena{
+  position:absolute;
+  top:40%;
+  width:100%;
+  text-align:center;
+  font-size:4.8vw;
+  line-height:1.9;
+}
+
+.namaz{
+  display:flex;
+  justify-content:space-between;
+  width:65%;
+  margin:0 auto;
+}
+
+.namaz span:first-child{
+  font-weight:bold;
+  color:white;
+}
+
+.namaz span:last-child{
+  color:white;
+}
+
+/* AKTIVNI NAMAZ (kasnije ćemo dodati logiku) */
+.aktivni{
+  background:rgba(255,255,255,0.2);
+  transform:scale(1.05);
+  box-shadow:0 0 25px white;
+  border-radius:10px;
+}
+
+/* DRUGA BEŽ TRAKA */
+#countdownBar{
+  position:absolute;
+  top:70%;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:0 8%;
+  font-size:3vw;
+  color:black;
+}
+
+#countdownBar b{
+  font-weight:bold;
+}
+
+/* POKRETNA TRAKA */
+#marquee{
+  position:absolute;
+  bottom:3%;
+  width:100%;
+  color:white;
+  font-size:2.5vw;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+#marquee span{
+  display:inline-block;
+  padding-left:100%;
+  animation:marquee 20s linear infinite;
+}
+
+@keyframes marquee{
+  from{transform:translateX(0);}
+  to{transform:translateX(-100%);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="sat"></div>
+<div id="datum"></div>
+<div id="vremena"></div>
+
+<div id="countdownBar">
+  <div id="countdownText"><b>ZORA</b> nastupa za: 02:15:10</div>
+  <div id="ramazanInfo">Jacija u rama. 20:52</div>
+</div>
+
+<div id="marquee">
+  <span>Teravije su 2 sata nakon iftara.</span>
+</div>
+
+<script>
+
+/* PRIMJER JEDNOG DANA – da provjeriš dizajn */
+const podaci = {
+  zora:"04:38",
+  izlazak:"06:08",
+  podne:"12:00",
+  ikindija:"14:56",
+  aksam:"18:52",
+  jacija:"19:33"
+};
+
+function updateSat(){
+  const now=new Date();
+  document.getElementById("sat").innerHTML=
+    now.toLocaleTimeString("bs-RS",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+}
+
+function render(){
+  const lista=[
+    ["ZORA",podaci.zora],
+    ["IZLAZAK",podaci.izlazak],
+    ["PODNE",podaci.podne],
+    ["IKINDIJA",podaci.ikindija],
+    ["AKŠAM",podaci.aksam],
+    ["JACIJA",podaci.jacija]
+  ];
+
+  let html="";
+  lista.forEach(n=>{
+    html+=`<div class="namaz">
+             <span>${n[0]}</span>
+             <span>${n[1]}</span>
+           </div>`;
+  });
+
+  document.getElementById("vremena").innerHTML=html;
+
+  const d=new Date();
+  document.getElementById("datum").innerHTML=
+  d.toLocaleDateString("bs-RS",{weekday:'long',day:'2-digit',month:'long',year:'numeric'})
+  +" / 12. ramazan 1447.";
+}
+
+setInterval(updateSat,1000);
+updateSat();
+render();
+
+</script>
+
+</body>
+</html>
